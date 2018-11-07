@@ -30,9 +30,6 @@ xt = transpose(xt);
 
 xt
 
-pause;
-
-
 %generate error in measurement
 R_position = 4;
 R_velocity = 2.5;

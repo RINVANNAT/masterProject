@@ -10,7 +10,7 @@ N = 28; % number of time steps
 t = 1:28; % time vector (s)
 
 
-dt = 1; % Sampling time (s)
+dt = 4/15; % Sampling time (s)
 % t = dt*(1:N); % time vector (s)
 F = [ 
        1, 0, dt, 0;
@@ -40,34 +40,34 @@ Poy = 238; % position in y
 
 %observation input
 xt = [ 
-          304  242 4/15 4/15;
-          305  242 4/15 4/15;
-          305  242 4/15 4/15;
-          306  242 4/15 4/15;
-          305  242 4/15 4/15;
-          305  242 4/15 4/15;
-          306  241 4/15 4/15;
-          306  240 4/15 4/15;
-          305  240 4/15 4/15;
-          305  239 4/15 4/15;
-          306  238 4/15 4/15;
-          305  239 4/15 4/15;
-          306  239 4/15 4/15;
-          307  239 4/15 4/15;
-          306  239 4/15 4/15;
-          307  240 4/15 4/15;
-          307  240 4/15 4/15;
-          308  240 4/15 4/15;
-          309  239 4/15 4/15;
-          309  240 4/15 4/15;
-          308  240 4/15 4/15;
-          308  239 4/15 4/15;
-          310  238 4/15 4/15;
-          308  238 4/15 4/15;
-          310  239 4/15 4/15;
-          310  239 4/15 4/15;
-          310  238 4/15 4/15;
-          309  240 4/15 4/15;
+          304  242 0 0;
+          305  242 0 0;
+          305  242 0 0;
+          306  242 0 0;
+          305  242 0 0;
+          305  242 0 0;
+          306  241 0 0;
+          306  240 0 0;
+          305  240 0 0;
+          305  239 0 0;
+          306  238 0 0;
+          305  239 0 0;
+          306  239 0 0;
+          307  239 0 0;
+          306  239 0 0;
+          307  240 0 0;
+          307  240 0 0;
+          308  240 0 0;
+          309  239 0 0;
+          309  240 0 0;
+          308  240 0 0;
+          308  239 0 0;
+          310  238 0 0;
+          308  238 0 0;
+          310  239 0 0;
+          310  239 0 0;
+          310  238 0 0;
+          309  240 0 0;
       ];
 
  xt = transpose(xt);
@@ -156,24 +156,29 @@ for i=1: length(x)
     plot(pre(1),pre(2),'x','LineWidth',1,'Color','green'); hold on
     plot(mes(1),mes(2),'x','LineWidth',1,'Color','blue'); hold on
 end
+xlabel('X'); ylabel('Y'); grid on;
+legend('Estimated','Predicted', 'Measured');
 
 z
 (predicted_val)
 
 (x)
 
+
+figure();
+
 % Plot the states
-%   figure(1);
-%   subplot(211);
-%   plot(t, (predicted_val(1,:)), 'g-', t, (x(1,:)), 'b--', 'LineWidth', 2);
-%    hold on; plot(t, z(1,:), 'r:', 'LineWidth', 1.5)
-%   xlabel('t (s)'); ylabel('position in x direction =  (m)'); grid on;
-%   legend('Predicted Value', 'Estimated','Measured');
-%   subplot(212);
-%   plot(t, (predicted_val(2,:)), 'g-', t, (x(2,:)), 'b--', 'LineWidth', 2);
-%    hold on; plot(t, z(2,:), 'r:', 'LineWidth', 1.5)
-%   xlabel('t (s)'); ylabel('position in y direction = (m)'); grid on;
-%   legend('Predicted Value', 'Estimated','Measured');
+   figure(1);
+   subplot(211);
+   plot(t, (predicted_val(1,:)), 'g-', t, (x(1,:)), 'b--', 'LineWidth', 2);
+    hold on; plot(t, z(1,:), 'r:', 'LineWidth', 1.5)
+   xlabel('t (s)'); ylabel('position in x direction =  (m)'); grid on;
+   legend('Predicted Value', 'Estimated','Measured');
+   subplot(212);
+   plot(t, (predicted_val(2,:)), 'g-', t, (x(2,:)), 'b--', 'LineWidth', 2);
+    hold on; plot(t, z(2,:), 'r:', 'LineWidth', 1.5)
+   xlabel('t (s)'); ylabel('position in y direction = (m)'); grid on;
+   legend('Predicted Value', 'Estimated','Measured');
 
 
 
