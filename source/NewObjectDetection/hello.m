@@ -5,8 +5,9 @@ function mat = hello(I1, vanishingPoint, p1,p2,p3,p4, propRight, propLeft)
      alternatePoint = [ ceil(vanishingPoint(1,1)), ceil(vanishingPoint(1,2))+5];
      
      
-%      imshow(I1);
-%      hold on
+%       imshow(I1);
+%       figure();
+%       hold on
 %      plot( p2(1, 1), p2(1,2), 'c*', 'LineWidth',4, 'Color','magenta');
 %        plot( p3(1, 1), p3(1,2), 'c*', 'LineWidth',4, 'Color','red');
 %      figure();
@@ -75,7 +76,7 @@ function mat = hello(I1, vanishingPoint, p1,p2,p3,p4, propRight, propLeft)
 
 
     else
-       minY = p2(1,2);
+       minY = p2(1,2)+10;
 
        if p3(1,2) >= imgHeight
            con=3
@@ -88,7 +89,7 @@ function mat = hello(I1, vanishingPoint, p1,p2,p3,p4, propRight, propLeft)
 
 
        else
-           con=4
+%            con=4
 
            [monitorSlope, monitorIntercept] = line_equation( [imgWidth, p2(1,2)], p2);
            [monitorPointX, monitorPointY] = compute_interception_point(propRight, [monitorSlope, monitorIntercept]);
@@ -96,7 +97,7 @@ function mat = hello(I1, vanishingPoint, p1,p2,p3,p4, propRight, propLeft)
             endJIndex = imgWidth-10;
             PointToMonitor = [imgWidth, p2(1,2)];
             pointA_ = ceil(p3);
-            p2 = [p2(1,1)+ 20, p2(1,2)];
+            p2 = [p2(1,1)+ 20, p2(1,2)+10];
             p3 = [p3(1,1)- 15, p3(1,2)];
             p1 = [p1(1,1), p1(1,2)+ 5];
        end
@@ -127,8 +128,13 @@ function mat = hello(I1, vanishingPoint, p1,p2,p3,p4, propRight, propLeft)
     end
 
      mat = res;
-     
-%      imshow(mat);
-%      pause;
+%      
+%       imshow(mat);
+%       hold on
+%       plot(p1(1,1),p1(1,2),'x','LineWidth',2,'Color','red');
+%       plot(p2(1,1),p2(1,2),'x','LineWidth',2,'Color','green');
+%       plot(p3(1,1),p3(1,2),'x','LineWidth',2,'Color','yellow');
+%       
+%       pause;
     
 end

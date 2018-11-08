@@ -3,17 +3,17 @@ function [referencePoint, rightLine, slopeRightLine, interceptRightLine, leftLin
    [height, width] = size(frame);
    [middleSlope, middleIntercept] = line_equation([width/2, 0], [((width/2)-1), height]);
    [leftLine, rightLine] = houghLines(frame);
-%       imshow(frame); hold on
-%      
-%       if ~isempty(leftLine) && ~isempty(leftLine)
-%           xy = [leftLine.point1; leftLine.point2];
-%            xy1 = [rightLine.point1; rightLine.point2];
-%           plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
-%           plot(xy1(:,1),xy1(:,2),'LineWidth',2,'Color','yellow');
-%           figure();
-%       end
-      
-%      pause;
+%        imshow(frame); hold on
+% %      
+%        if ~isempty(leftLine) && ~isempty(rightLine)
+%            xy = [leftLine.point1; leftLine.point2];
+%             xy1 = [rightLine.point1; rightLine.point2];
+%            plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+%            plot(xy1(:,1),xy1(:,2),'LineWidth',2,'Color','yellow');
+%            figure();
+%        end
+%       
+%       pause;
    
    if ~isempty(leftLine) && ~isempty(rightLine)
         [slope1, intercept1] = line_equation(leftLine.point1, leftLine.point2); % leftLine

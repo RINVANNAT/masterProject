@@ -9,6 +9,6 @@ function [dual_different, edgeFrame] = frame_substraction(frame1, frame2, vanish
 %       imshow(frame2);
 %       
       edgeFrame = frame2;
-    dual_different = frame1 - frame2;
+    dual_different = abs(frame1 - frame2);
 
 end

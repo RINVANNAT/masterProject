@@ -21,9 +21,9 @@ function  Ioutput = cannydetector(I)
     
     Ie=im2uint8(Iabst1);
     
-    Tl=70;
+    Tl=90;
     Th=150;
-    TooHight = 150;
+    TooHight = 200;
     
     [Ie1]=gradingedges(Ie,Tl,Th, TooHight);
   

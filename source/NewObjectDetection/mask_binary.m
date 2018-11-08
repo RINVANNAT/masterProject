@@ -74,7 +74,7 @@ end
 %  
 
     
-   for i= ceil(vanishingPoint(1,2))-10 :size(img, 1)- 50 % throw y
+   for i= ceil(vanishingPoint(1,2))-10 :size(img, 1)- 25 % throw y
        for j=startJIndex:endJIndex % throw x
            
            if i <= minY

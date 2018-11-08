@@ -6,19 +6,19 @@ function [leftLine, rightLine] = houghLines(frame_mat)
         %------end initial clusters---------
         [frameHeight, frameWidth ] = size(frame_mat);
         frame_mat(1:ceil(frameHeight/2), :) = 0;
-        frame_mat(frameHeight-20:frameHeight, :) = 0;
+        frame_mat(frameHeight-10:frameHeight, :) = 0;
         
      
 %         frame_mat = imgaussfilt(frame_mat, 2);
-        BW = edge(frame_mat,'sobel'); % create binary image using canny edge detection
-        
+        BW = edge(frame_mat,'canny'); % create binary image using canny edge detection
         
         [H,T,R] = hough(BW); % apply hough tranform 
         P  = houghpeaks(H,30,'threshold',ceil(0.2*max(H(:)))); % get hough peak value
-        lines = houghlines(BW,T,R,P,'FillGap',10,'MinLength',100); % get lines from hough tranform by configuring some parmetters 
-%            plot_hough_lines(lines, frame_mat);
+        lines = houghlines(BW,T,R,P,'FillGap',10,'MinLength',75); % get lines from hough tranform by configuring some parmetters 
+            
 %            
-%            pause;
+%             plot_hough_lines(lines, frame_mat);
+%             pause;
 %         lines
 %         lines.theta
 %         lines = sort(lines.theta);
@@ -53,8 +53,8 @@ function [leftLine, rightLine] = houghLines(frame_mat)
 %              end
 
 
-               if lines(k).theta <= -20 && lines(k).theta >= -83
-                   
+               if lines(k).theta <= -20 && lines(k).theta >= -85
+                  
                    %% right lane marking
                    if (lines(k).point1(1,1) >= frameWidth/2) && (lines(k).point2(1,1) >= frameWidth/2)
                        
@@ -135,14 +135,19 @@ function [leftLine, rightLine] = houghLines(frame_mat)
                end
           end
           
+%           newliness = [];
           if rightLineIndex ~= 0
               rightLine = lines(rightLineIndex);
-%               rightLine
+%                rightLine
+%                newliness = [newliness; rightLine];
           end
            
           
            if leftLineIndex ~= 0
               leftLine = lines(leftLineIndex);
-%               leftLine
+%                leftLine
+%                newliness = [newliness; leftLine];
            end
+%            newliness
+           
 end
