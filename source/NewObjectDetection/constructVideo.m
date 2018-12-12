@@ -5,7 +5,7 @@ function constructVideo()
     images = cell(3,1);
     k=1;
     tic
-    for i=1700:3000
+    for i=2000:3000
         
         originalReadIMG =  imread(strcat('/Users/mac/Desktop/object_detection/newEx/f2/', num2str(i), '.jpg'));
         images{k} = resizeIMG_without_losing_ratio(originalReadIMG);
@@ -15,7 +15,7 @@ function constructVideo()
     toc
     
      % create the video writer with 1 fps
-     writerObj = VideoWriter('/Users/mac/Desktop/object_detection/official_video1.avi');
+     writerObj = VideoWriter('/Users/mac/Desktop/object_detection/official_video2.avi');
      writerObj.FrameRate = 25;
      
      % set the seconds per image

@@ -1,5 +1,5 @@
 
-function New_Three_Diff_Method_2()
+function objectDetection()
 
 clear all;
 close all;
@@ -13,8 +13,6 @@ clc;
      estimated_value(:, 1) = x_o;
      prediction_value = zeros(8, 1);
      prediction_value = x_o;
-     
-     
      directoryName = '/Users/mac/Desktop/object_detection/manipulated_frame2/no_shifted/f4'; % path on my own mac
      directoryName1 = '/Users/mac/Desktop/object_detection/manipulated_frame2/no_shifted/f5'; % path on my own mac
      directoryName2 = '/Users/mac/Desktop/object_detection/manipulated_frame2/no_shifted/f6'; % path on my own mac
@@ -33,11 +31,13 @@ clc;
      propRight = [slopeRightLine, interceptRightLine];
      propLeft = [slopeLeftLine, interceptLeftLine];
      mask = mask_binary(frame, p1, p2, p3, p4, point_, propRight, propLeft, footCut);
-    
+     
+     imshow(mask);
+    pause;
    
     [tri_diff_frame, tri_frames, dual_diff_frames ] = init_three_frame(frame, mask, point_);
     loopIndex = 1;
-    secondInstance = 5;
+    secondInstance = 1;
     previousVanishingPoint = point_;
     SE_2 = strel('disk',2);
     
@@ -48,8 +48,7 @@ clc;
     checkLength = 0;
     detectionStatus = 0;
     startIndex = 0;
-    doOnlyOnce =1;
-    
+    k=1;
         %% main loop 
          while ~ isDone(videoread)
              
@@ -77,20 +76,17 @@ clc;
                         end
                         tri_frames(:,:,3) = currentFrame;
                     else
+                        
                         % mean index:[ 1==> image1, 2==> image5, 3==> image10 ]
                         for idx=1:2
                              tri_frames(:, :, idx) = tri_frames(:, :, idx+1);
                         end
                          
                          tri_frames(:,:,3) = currentFrame;
-                         
-                         
-                         
 
                        if loopIndex >=1
                            
-                           
-                          
+                            k = k +1;
                            if detectionStatus == 1
                                
                                 level2_thres = 0.08;
@@ -99,15 +95,8 @@ clc;
                                 [dual_diff_frames(:,:,2), edge_S2]= frame_substraction(tri_frames(:,:,3), tri_frames(:,:,2), previousVanishingPoint, mask);
                                 tri_diff_frame =  dual_diff_frames(:,:,1) + dual_diff_frames(:,:,2) ;
                                 tri_diff_frame = imbinarize(tri_diff_frame, level2_thres);% won mac
-                                resEdges = edge(edge_S1 ,'sobel');
-                                tri_diff_frame = tri_diff_frame | resEdges;
-                                
                                  tri_diff_frame = bwareaopen(tri_diff_frame, 9);
                                   mat =  imdilate(tri_diff_frame, SE_2);
-                                imshow(mat);
-                               figure();
-                                 
-                                
                            else
                                 level2_thres = 0.055;
                                 [dual_diff_frames(:,:,1), edge_S1]= frame_substraction(tri_frames(:,:,1), tri_frames(:,:,2), previousVanishingPoint, mask);
@@ -117,28 +106,100 @@ clc;
                                 resEdges = edge(edge_S1 ,'sobel');
                                 [tri_diff_frame, resEdges] = hello(resEdges, tri_diff_frame, point_, p1,p2,p3,p4, propRight,propLeft);
                                 tri_diff_frame = tri_diff_frame | resEdges;
-                                tri_diff_frame = bwareaopen(tri_diff_frame, 5);
+                                tri_diff_frame = bwareaopen(tri_diff_frame, 3);
                                 mat =  imdilate(tri_diff_frame, SE_2);
+                                
                                
                            end
-                              if true == 1
-                                 
-                                 [stats, mat, meas,  CollectBoundingBoxValue, CollectMeasureValue] = blobDetection(mat, CollectBoundingBoxValue, CollectMeasureValue, detectionStatus, checkLength);
-                                  if ~isempty(stats)
-                                      detectionStatus =1;
-                                      startIndex = startIndex +1;
-                                  else
-                                      detectionStatus = 0;
+                           
+                           
+                           if true == 0
+                               
+                              
+                                [labeledImage, numberOfObjects] = bwlabel(mat);
+                                stats = regionprops(labeledImage,{'Area','BoundingBox','perimeter', 'Centroid', 'Orientation', 'ConvexImage'});
+
+                                if length(stats) ~= 1
+                                    stats = struct2table(stats);
+                                    checkLength=0;
+                                else
+                                    checkLength = 1;
+                                end
+                            % 1st metric: ratio between perimeter and round length of its bounding box
+                                 stats.Metric1 = 2*sum(stats.BoundingBox(:,3:4),2)./stats.Perimeter;
+                                 idx1 = abs(1 - stats.Metric1) < 0.3;
+                            %2nd metric: ratio between blob area and it's bounding box's area
+                                 stats.Metric2 = stats.Area./(stats.BoundingBox(:,3).*stats.BoundingBox(:,4));   
+                                 idx2 = stats.Metric2 >= 0.45;
+
+                            % 3rd metic: approximation of area size
+                                 idx3 =  stats.Area >= 290;
+                                 idx4 = stats.Orientation >= -3;
+                                 finalIndex = idx1 & idx2 & idx3 & idx4;
+%                                  stats
+%                                  imshow(mat);
+                                 stats(~finalIndex,:) = [];
+
+                                 idFound = find(finalIndex==1);
+                                 mat = ismember(labeledImage, idFound) ;
+                                  imGG = mat;
+                                  if checkLength == 0
+                                       if ~isempty(stats.Centroid) 
+                                           for kk = 1:height(stats)
+                                            imGG = insertShape(uint8(imGG),'rectangle', stats.BoundingBox(kk,:), 'LineWidth',1);
+                                            CollectMeasureValue = [CollectMeasureValue, transpose(stats.Centroid)];
+                                             
+%                                               [bbX, bbY, midX, midY, bbWidth, bbheight] = addJustingThreshold(transpose(stats.BoundingBox));
+%                                               meas = [ midX; midY; bbWidth; bbheight];
+                                              CollectBoundingBoxValue = [CollectBoundingBoxValue,meas transpose(stats.BoundingBox)];
+                                               mat = mat | imGG;
+                                               imwrite((mat), fullname);
+                                           end
+                                       else
+%                                            CollectMeasureValue = [CollectMeasureValue, CollectMeasureValue(:, k-2)];
+%                                            CollectBoundingBoxValue = [CollectBoundingBoxValue,CollectBoundingBoxValue(:,k-2) ];
+%                                            CollectMeasureValue(:,k-1)
+%                                            CollectBoundingBoxValue(:,k-1)
+                                           
+                                       end
+                                      
+                                  else 
+                                      %/ ---when stats have only one
+                                      %element but there might be no when
+                                      %it come to the blob detection
+                                      if ~isempty(stats) 
+                                          imGG = insertShape(uint8(imGG),'rectangle', stats.BoundingBox(1,:), 'LineWidth',1);
+                                          CollectMeasureValue = [CollectMeasureValue, transpose(stats.Centroid)];
+%                                           [bbX, bbY, midX, midY, bbWidth, bbheight] = addJustingThreshold(transpose(stats.BoundingBox));
+%                                            meas = [ midX; midY; bbWidth; bbheight];
+                                          CollectBoundingBoxValue = [CollectBoundingBoxValue,transpose(stats.BoundingBox) ];
+                                          mat = mat | imGG;
+                                          imwrite((mat), fullname);
+                                      else
+                                          jjj= 'eeorr'
+                                      end
                                       
                                   end
+
+                                 
+
+%                                   CollectBoundingBoxValue = [CollectBoundingBoxValue,transpose(stats.BoundingBox) ];
                                   
-%                                   [x, estimated_value, P_o] = realKF(meas, I, x_o, H_k, Q_k, F_k, R_k, P_o, x,estimated_value, (k-1));
-%                                    imwrite((mat), fullname);
-                              end
-                               imwrite((currentFrame), fullname1);
-                               imwrite((tri_diff_frame), fullname2);
-                               estimated_value
-                               prediction_value
+%                                   if detectionStatus >0
+%                                        meas = transpose(stats.BoundingBox);
+%                                   else
+%                                      
+%                                       
+%                                      
+%                                   end
+                                   
+                                  
+                               
+                           end
+                          imwrite((resEdges), fullname1);
+                          imwrite((tri_diff_frame), fullname2);
+                               
+                               
                        end
                     end
                 end
@@ -147,7 +208,7 @@ clc;
             
             loopIndex=loopIndex+1;
            
-            
+            loopIndex
 
          end
          %% end while loop

@@ -6,7 +6,7 @@ clc;
 
     directoryName = '/Users/mac/Desktop/object_detection/manipulated_frame/t1';
     %----reading video for displaying 
-     videoread = vision.VideoFileReader('/Users/mac/Desktop/object_detection/official_video1.mov');
+     videoread = vision.VideoFileReader('/Users/mac/Desktop/object_detection/official_video2.mov');
      frame  = step(videoread);
      frame = rgb2gray(frame);
 %       [leftLine, rightLine] = houghLines(frame);
@@ -16,6 +16,7 @@ clc;
     
     loopIndex = 1;
     instance =615;
+    footCut = 50;
     
         %% main loop 
          while ~ isDone(videoread)
@@ -39,7 +40,9 @@ clc;
                  [p2, p3, p4, p5 ] = laneMonitoring(rightLine, leftLine, currentFrame);
                  propRight = [slope2, intercept2];
                  propLeft = [slope1, intercept1];
-                 mask = mask_binary(currentFrame, p1, p2, p3, p4, referencePoint, propRight, propLeft);
+                 mask = mask_binary(currentFrame, p1, p2, p3, p4, referencePoint, propRight, propLeft, footCut);
+                 imshow(mask);
+                 figure();
                  checkFrame = currentFrame .* mask;
                  
                  imshow(checkFrame);

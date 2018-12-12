@@ -1,0 +1,6 @@
+function findObject( binaryImage)
+
+    
+
+
+end

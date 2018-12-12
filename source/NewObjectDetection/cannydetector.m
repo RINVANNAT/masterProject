@@ -23,7 +23,7 @@ function  Ioutput = cannydetector(I)
     
     Tl=90;
     Th=150;
-    TooHight = 200;
+    TooHight = 250;
     
     [Ie1]=gradingedges(Ie,Tl,Th, TooHight);
   

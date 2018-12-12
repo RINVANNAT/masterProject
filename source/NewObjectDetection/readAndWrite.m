@@ -10,7 +10,7 @@ clc;
 % open(writerObj);
 directoryName = '/Users/mac/Desktop/object_detection/newEx/f2';
     %----reading video for displaying 
-     videoread = vision.VideoFileReader('/Users/mac/Desktop/object_detection/1.mov');
+     videoread = vision.VideoFileReader('/Users/mac/Desktop/object_detection/official_video5.mov');
      frame  = step(videoread);
      
      [imgHeight, imgWidth, dim] = size(frame);
@@ -23,7 +23,7 @@ directoryName = '/Users/mac/Desktop/object_detection/newEx/f2';
         
 %         images{loopIndex} = double(currentFrame);
         fileName = [sprintf('%03d', loopIndex) '.jpg'];
-        fullname = fullfile(directoryName, fileName);
+         fullname = fullfile(directoryName, fileName);
         
         
 %          if loopIndex >= 1980 && loopIndex <= 2650
@@ -33,10 +33,12 @@ directoryName = '/Users/mac/Desktop/object_detection/newEx/f2';
 %          end
     
             
-             imwrite((currentFrame), fullname);
+%              imwrite((currentFrame), fullname);
             loopIndex=loopIndex+1;
             toc
+            
      end
+     loopIndex
      
      
 end

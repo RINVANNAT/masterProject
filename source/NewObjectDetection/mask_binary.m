@@ -1,4 +1,4 @@
-function frame = mask_binary(img, p1, p2, p3, p4, vanishingPoint, propRight, propLeft)
+function frame = mask_binary(img, p1, p2, p3, p4, vanishingPoint, propRight, propLeft, footCut)
 
 [imgHeight, imgWidth] = size(img);
 sub_result = zeros(size(img, 1), size(img, 2));
@@ -74,7 +74,7 @@ end
 %  
 
     
-   for i= ceil(vanishingPoint(1,2))-10 :size(img, 1)- 25 % throw y
+   for i= ceil(vanishingPoint(1,2))-5 :size(img, 1)- footCut % throw y
        for j=startJIndex:endJIndex % throw x
            
            if i <= minY
