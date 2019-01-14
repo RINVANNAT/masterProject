@@ -39,12 +39,13 @@ function [stats, mat, meas,  CollectBoundingBoxValue, CollectMeasureValue] = blo
 
       CollectBoundingBoxValue = [CollectBoundingBoxValue,transpose(stats.BoundingBox) ];
       CollectMeasureValue = [CollectMeasureValue, transpose(stats.Centroid)];
-      if detectionStatus >0
-           meas = transpose(stats.BoundingBox);
-      else
-          [bbX, bbY, midX, midY, bbWidth, bbheight] = addJustingThreshold(transpose(stats.BoundingBox));
-          meas = [ midX; midY; bbWidth; bbheight];
-      end
+      meas = 0;
+%       if detectionStatus >0
+%            meas = transpose(stats.BoundingBox);
+%       else
+%           [bbX, bbY, midX, midY, bbWidth, bbheight] = addJustingThreshold(transpose(stats.BoundingBox));
+%           meas = [ midX; midY; bbWidth; bbheight];
+%       end
       
       mat = mat | imGG;
       

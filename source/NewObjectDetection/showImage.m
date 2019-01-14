@@ -38,9 +38,6 @@ clc;
               
               newBoundingBoxData(:,index) = [bbX; bbY; bbWidth; bbheight];
               
-              
-             
-              
 
 %               imshow(currentFrame);
 %               hold on;

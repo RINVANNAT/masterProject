@@ -3,7 +3,7 @@ function [referencePoint, rightLine, slopeRightLine, interceptRightLine, leftLin
    [height, width] = size(frame);
    [middleSlope, middleIntercept] = line_equation([width/2, 0], [((width/2)-1), height]);
   
-   [leftLine, rightLine, footCut] = houghLines(frame);
+   [leftLine, rightLine, footCut] = houghLines_origin(frame);
    
 %         imshow(frame); hold on      
 %         if ~isempty(leftLine) && ~isempty(rightLine)

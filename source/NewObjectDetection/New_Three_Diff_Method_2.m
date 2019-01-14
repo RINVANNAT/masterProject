@@ -91,7 +91,7 @@ clc;
                            
                            
                           
-                           if detectionStatus == 1
+                           if detectionStatus == 1000
                                
                                 level2_thres = 0.08;
                                mask  = newMask (stateVector, currentFrame, point_);
@@ -104,8 +104,6 @@ clc;
                                 
                                  tri_diff_frame = bwareaopen(tri_diff_frame, 9);
                                   mat =  imdilate(tri_diff_frame, SE_2);
-                                imshow(mat);
-                               figure();
                                  
                                 
                            else

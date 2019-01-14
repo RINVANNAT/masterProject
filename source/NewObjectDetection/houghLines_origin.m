@@ -1,5 +1,5 @@
-function [leftLine, rightLine] = houghLines_origin(frame_mat)
-
+function [leftLine, rightLine, footerCut] = houghLines_origin(frame_mat)
+footerCut = 50;
 
  % ------start initialize four clusters ------
 %              initial_clusters = init_clusters(frame_mat);
@@ -13,10 +13,6 @@ function [leftLine, rightLine] = houghLines_origin(frame_mat)
      
 %         frame_mat = imgaussfilt(frame_mat, 2);
         BW = edge(frame_mat,'sobel'); % create binary image using canny edge detection
-        figure();
-        imshow(BW);
-        
-        
         
         [H,T,R] = hough(BW); % apply hough tranform 
         0.2*max(H(:))
@@ -25,7 +21,6 @@ function [leftLine, rightLine] = houghLines_origin(frame_mat)
             
 %            
 %              plot_hough_lines(lines, frame_mat);
-             pause;
 %         lines
 %         lines.theta
 %         lines = sort(lines.theta);
